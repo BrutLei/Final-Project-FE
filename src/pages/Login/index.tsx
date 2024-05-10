@@ -1,10 +1,16 @@
 import { faFacebook, faGooglePlus } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router-dom";
+import { signInWithGoogle } from "../../../firebaseConfig";
 const Login = () => {
   const navigate = useNavigate();
   const directHome = () => {
     navigate("/");
+  };
+
+  const signinGoogle = async () => {
+    console.log("login with google");
+    await signInWithGoogle();
   };
   return (
     <>
@@ -61,7 +67,10 @@ const Login = () => {
             </span>
           </p>
           <div className="flex items-center justify-evenly w-full my-3">
-            <button className="h-10 mr-[5px] my-[5px] border border-gray-400 rounded w-[50%] capitalize">
+            <button
+              className="h-10 mr-[5px] my-[5px] border border-gray-400 rounded w-[50%] capitalize"
+              onClick={signinGoogle}
+            >
               <FontAwesomeIcon
                 icon={faGooglePlus}
                 size="xl"
