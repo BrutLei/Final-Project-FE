@@ -1,7 +1,7 @@
 import { faFacebook, faGooglePlus } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { signInWithGoogle } from "../../../firebaseConfig";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { signUp } from "../../services/apiHandler/UserService";
 import { toast, Slide } from "react-toastify";
 
@@ -12,7 +12,7 @@ const Login = () => {
    * loginRegister = 0 => register
    */
   const namePattern = /^[a-zA-Z]{2,40}( [a-zA-Z]{2,40})+$/;
-  const [refresh, setRefresh] = useState(false);
+  // const [refresh, setRefresh] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
@@ -78,7 +78,7 @@ const Login = () => {
     await signInWithGoogle();
   };
 
-  useEffect(() => {}, [refresh]);
+  // useEffect(() => {}, [refresh]);
   return (
     <>
       <h2 className="capitalize text-3xl font-bold mb-10 min-[375px]:p-3 min-[375px]:text-center ">

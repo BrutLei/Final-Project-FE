@@ -3,11 +3,6 @@ import { useRef } from "react";
 const VerifyEmail = () => {
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
-  const handleInputChange = (index: number, value: string) => {
-    if (value.length === 1 && index < inputRefs.current.length - 1) {
-      inputRefs.current[index + 1]?.focus();
-    }
-  };
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const verificationCode = inputRefs.current
