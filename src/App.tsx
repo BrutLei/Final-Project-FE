@@ -1,23 +1,35 @@
 import { Route, Routes, useNavigate } from "react-router-dom";
-import "./App.css";
-import { routes } from "./routes";
 import { Fragment } from "react/jsx-runtime";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { routes } from "./routes";
 
 function App() {
   const navigate = useNavigate();
 
+  const directHome = () => {
+    navigate("/");
+  };
   const directLogin = () => {
     navigate("/login");
   };
 
   return (
     <>
-      <button
-        className="w-20 h-16 bg-red-500 border border-black rounded-sm m-4 "
-        onClick={directLogin}
-      >
-        Login
-      </button>
+      <div className="items-center justify-evenly">
+        <button
+          className="h-10 bg-red-500 mr-3 border border-black rounded-sm "
+          onClick={directHome}
+        >
+          Back to home
+        </button>
+        <button
+          className="h-10 w-14 bg-blue-500 ml-3 border border-black rounded-sm "
+          onClick={directLogin}
+        >
+          Login
+        </button>
+      </div>
       <Routes>
         {routes.map((e, index) => {
           const Page = e.page;
@@ -35,6 +47,7 @@ function App() {
           );
         })}
       </Routes>
+      <ToastContainer newestOnTop closeOnClick rtl={false} pauseOnFocusLoss />
     </>
   );
 }

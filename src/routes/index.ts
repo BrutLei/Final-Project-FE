@@ -1,10 +1,16 @@
-import { HelloPage, LoginPage } from "../pages";
+import { AuthLayout } from "../layouts";
+import { HelloPage, LoginPage, VerifyEmail } from "../pages";
 
 export const routes = [
   {
     path: "/login",
     page: LoginPage,
-    layout: null,
+    layout: AuthLayout,
+  },
+  {
+    path: "/verify-email",
+    page: VerifyEmail,
+    layout: AuthLayout,
   },
   {
     path: "*",
