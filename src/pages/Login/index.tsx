@@ -1,8 +1,8 @@
 import { faFacebook, faGooglePlus } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { signInWithGoogle } from "../../../firebaseConfig";
+import { signInWithGoogle } from "@services/firebaseConfig";
 import { useState } from "react";
-import { signUp } from "../../services/apiHandler/UserService";
+import { login, signUp } from "@services/apiHandler/UserService";
 import { toast, Slide } from "react-toastify";
 
 const Login = () => {
@@ -70,6 +70,33 @@ const Login = () => {
             }
           }
         }
+      }
+    }
+    if (loginRegister === 1) {
+      const response = (await login({ email, password })) as {
+        message: string;
+        code: number;
+        data: any;
+      };
+      if (response && response.code === 400) {
+        toast.error(response.message, {
+          autoClose: 3000,
+          theme: "colored",
+          transition: Slide,
+          closeOnClick: true,
+        });
+      } else {
+        toast.success(response.message, {
+          position: "top-center",
+          autoClose: 3002,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Slide,
+        });
       }
     }
   };

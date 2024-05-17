@@ -1,5 +1,5 @@
-import { AuthLayout } from "../layouts";
-import { HelloPage, LoginPage, VerifyEmail } from "../pages";
+import { AuthLayout } from "@/layouts";
+import { HelloPage, LoginPage, VerifyEmail } from "@/pages";
 
 export const routes = [
   {
