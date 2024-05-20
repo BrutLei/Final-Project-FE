@@ -8,6 +8,7 @@
     // Alias for src folder
     "baseUrl": "./",
     "paths": {
+      "@public/*": ["public/*"],
       "@/*": ["src/*"],
       "@services/*": ["src/services/*"]
     },

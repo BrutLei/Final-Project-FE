@@ -1,0 +1,13 @@
+/* Hide sidebar on small screens */
+@media (max-width: 767px) {
+  .sidebar {
+    display: none;
+  }
+}
+
+/* Show sidebar on medium-sized screens and up */
+@media (min-width: 768px) {
+  .sidebar {
+    display: block;
+  }
+}
