@@ -1,14 +1,15 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { ToastContainer } from "react-toastify";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 import "./index.css";
 import RootLayout from "./layouts/root-layout";
 import HelloPage from "./routes/helloWorld";
-import AuthLayout from "./layouts/auth-layout";
-import SignInPage from "./routes/sign-in";
-import SignUpPage from "./routes/sign-up";
 import SearchPage from "./routes/searchPage";
+import TeacherPage from "./routes/teacherPage";
+import CoursePage from "./routes/courses";
+import CreatePage from "./routes/createPage";
+import CourseIdPage from "./routes/courseIdPage/courseIdPage";
 
 // Import the layouts
 
@@ -27,12 +28,16 @@ const router = createBrowserRouter([
       { path: "/", element: <HelloPage /> },
       { path: "/search", element: <SearchPage /> },
       {
-        element: <AuthLayout />,
+        path: "/teacher",
+        element: <Outlet />,
         children: [
-          { path: "/login", element: <SignInPage /> },
-          { path: "/signup", element: <SignUpPage /> },
+          { path: "", element: <TeacherPage /> },
+          { path: "courses", element: <CoursePage /> },
+          { path: "courses/:id", element: <CourseIdPage /> },
+          { path: "create", element: <CreatePage /> },
         ],
       },
+      { path: "*", element: <div>Not Found</div> },
     ],
   },
 ]);
@@ -40,6 +45,6 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <RouterProvider router={router} />
-    <ToastContainer />
+    <Toaster />
   </React.StrictMode>
 );

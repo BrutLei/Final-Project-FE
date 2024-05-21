@@ -26,7 +26,9 @@ export default function RootLayout() {
         <div className="sidebar h-full w-56 flex-col fixed inset-y-0 z-50">
           <SideBar />
         </div>
-        <Outlet />
+        <main className="md:pl-56 pt-[80px] h-full">
+          <Outlet />
+        </main>
       </div>
     </ClerkProvider>
   );

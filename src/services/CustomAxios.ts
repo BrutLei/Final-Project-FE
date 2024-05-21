@@ -5,14 +5,9 @@ const instance = axios.create({
 });
 instance.interceptors.response.use(
   function (response) {
-    if (response) {
-      console.log(response);
-
-      return response.data;
-    }
+    return response;
   },
   function (error) {
-    console.log(">>>Error Check: ", error.response.data);
     let res: { data?: any; status?: any; headers?: any } = {}; // Add type for 'res' variable
     if (error.response) {
       res.data = error.response.data;
