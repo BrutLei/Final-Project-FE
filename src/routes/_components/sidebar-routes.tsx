@@ -1,7 +1,6 @@
 import { BarChart, Compass, Layout, List } from "lucide-react";
 import SideBarItem from "./sidebar-item";
 import { useLocation } from "react-router-dom";
-SideBarItem;
 
 const guestRoutes = [
   {
