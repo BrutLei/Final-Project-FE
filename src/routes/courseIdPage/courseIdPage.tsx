@@ -5,15 +5,17 @@ import { LayoutDashboard } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import TitleForm from "./_components/title-form";
+import DescriptionForm from "./_components/description-form";
+import ImageForm from "./_components/image-form";
 
 interface ICourse {
-  Description: string | null;
+  description: string | null;
   categoryId: string | null;
   createdAt: Date;
   id: string;
   imageUrl: string | null;
   isPublished: boolean;
-  price: Number | null;
+  price: number | null;
   title: string;
   updatedAt: Date;
   userId: string;
@@ -34,7 +36,7 @@ const CourseIdPage = () => {
 
   const requiredFields = course && [
     course.title,
-    course.Description,
+    course.description,
     course.imageUrl,
     course.price,
     course.categoryId,
@@ -75,6 +77,16 @@ const CourseIdPage = () => {
           </div>
           <TitleForm
             initialData={{ title: course?.title }}
+            courseId={course?.id}
+            userId={userId}
+          />
+          <DescriptionForm
+            initialData={{ description: course?.description || "" }}
+            courseId={course?.id}
+            userId={userId}
+          />
+          <ImageForm
+            initialData={{ imageUrl: course?.imageUrl || "" }}
             courseId={course?.id}
             userId={userId}
           />
