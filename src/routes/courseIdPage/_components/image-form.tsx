@@ -1,10 +1,4 @@
-import { z } from "zod";
-
 import { useState } from "react";
-import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
-
-import axios from "@/services/CustomAxios";
 
 import { Button } from "@/components/ui/button";
 import { ImageIcon, Pencil, PlusCircle } from "lucide-react";
@@ -19,27 +13,10 @@ interface ImageFormProps {
   userId: string | undefined;
 }
 
-const formSchema = z.object({
-  imageUrl: z.string().min(1, { message: "Description is required" }),
-});
-
 const ImageForm = ({ initialData, courseId, userId }: ImageFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
-  const navigate = useNavigate();
 
   const toggleEdit = () => setIsEditing((current) => !current);
-
-  const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    try {
-      console.log({ userId, ...data });
-      await axios.patch(`/api/courses/${courseId}`, { userId, data: data });
-      toggleEdit();
-      navigate(0);
-      toast.success("Course updated successfully");
-    } catch (error) {
-      toast.error("Something went wrong. Please try again.");
-    }
-  };
 
   return (
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
@@ -67,18 +44,21 @@ const ImageForm = ({ initialData, courseId, userId }: ImageFormProps) => {
             <ImageIcon className="h-10 w-10 text-slate-500" />
           </div>
         ) : (
-          <div className="relative aspect-video mt-2">
+          <div className="relative aspect-video mt-2 flex flex-col items-center justify-center">
             <img
-              src={initialData?.imageUrl}
+              src={`http://localhost:3000/api/courses/images/${initialData?.imageUrl}`}
               alt="Upload"
               className="object-cover rounded-md"
             />
-            Current image
           </div>
         ))}
       {isEditing && (
         <div>
-          <FileUpload />
+          <FileUpload
+            userId={String(userId)}
+            courseId={String(courseId)}
+            previewSrc={`${initialData?.imageUrl}`}
+          />
           <div className="text-xs text-center text-muted-foreground mt-4">
             16:9 aspect ratio recommended
           </div>

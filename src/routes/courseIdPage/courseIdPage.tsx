@@ -7,6 +7,7 @@ import { Navigate, useNavigate, useParams } from "react-router-dom";
 import TitleForm from "./_components/title-form";
 import DescriptionForm from "./_components/description-form";
 import ImageForm from "./_components/image-form";
+import { useCookies } from "react-cookie";
 
 interface ICourse {
   description: string | null;
@@ -22,6 +23,7 @@ interface ICourse {
 }
 const CourseIdPage = () => {
   const { isSignedIn, isLoaded, userId } = useAuth();
+  const [cookies] = useCookies();
   const { id } = useParams();
   const [course, setCourse] = useState<ICourse>();
   const navigate = useNavigate();
@@ -31,6 +33,16 @@ const CourseIdPage = () => {
       setCourse({ course, ...res.data });
     } catch (error) {
       navigate("/");
+    }
+  };
+  const fetchCategories = async () => {
+    try {
+      const res = await axios.get("/api/categories", {
+        headers: { Authorization: cookies.__clerk_db_jwt },
+      });
+      console.log(res.data);
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -49,6 +61,7 @@ const CourseIdPage = () => {
 
   useEffect(() => {
     fetchCourse();
+    fetchCategories();
   }, []);
 
   if (!isLoaded) {
