@@ -134,11 +134,11 @@ const CourseIdPage = () => {
         </div>
         <div>
           <div>
-            <div className="flex items-center justify-start">
+            <div className="flex items-center gap-x-2">
               <IconBadge icon={ListChecks} />
               Course Chapter
             </div>
-            <div className="flex items-center justify-start">
+            <div className="flex items-center justify-start gap-x-2">
               <IconBadge icon={DollarSign} />
               Course Price
             </div>
