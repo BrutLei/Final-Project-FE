@@ -1,13 +1,16 @@
 import { IconBadge } from "@/components/icon-badge";
 import axios from "@/services/CustomAxios";
 import { useAuth } from "@clerk/clerk-react";
-import { LayoutDashboard } from "lucide-react";
+import { DollarSign, LayoutDashboard, ListChecks } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import TitleForm from "./_components/title-form";
 import DescriptionForm from "./_components/description-form";
 import ImageForm from "./_components/image-form";
+import CategoryForm from "./_components/category-form";
 import { useCookies } from "react-cookie";
+
+// import { useCookies } from "react-cookie";
 
 interface ICourse {
   description: string | null;
@@ -21,16 +24,27 @@ interface ICourse {
   updatedAt: Date;
   userId: string;
 }
+
+interface ICategory {
+  value: string;
+  label: string;
+}
+interface ICategories extends Array<ICategory> {}
+
 const CourseIdPage = () => {
   const { isSignedIn, isLoaded, userId } = useAuth();
   const [cookies] = useCookies();
   const { id } = useParams();
   const [course, setCourse] = useState<ICourse>();
+  const [categories, setCategories] = useState<ICategories>([]);
+
   const navigate = useNavigate();
   const fetchCourse = async () => {
     try {
       const res = await axios.get(`/api/courses/${id}`);
-      setCourse({ course, ...res.data });
+      if (res && res.data) {
+        setCourse({ course, ...res.data });
+      }
     } catch (error) {
       navigate("/");
     }
@@ -40,7 +54,15 @@ const CourseIdPage = () => {
       const res = await axios.get("/api/categories", {
         headers: { Authorization: cookies.__clerk_db_jwt },
       });
-      console.log(res.data);
+      const categoriesList = res.data.map(
+        (category: { id: string; name: string }) => ({
+          label: category.name,
+          value: category.id,
+        })
+      );
+      console.log(categoriesList);
+
+      setCategories(categoriesList);
     } catch (error) {
       console.error(error);
     }
@@ -103,6 +125,24 @@ const CourseIdPage = () => {
             courseId={course?.id}
             userId={userId}
           />
+          <CategoryForm
+            initialData={{ categoryId: course?.categoryId || "" }}
+            courseId={course?.id || ""}
+            userId={userId}
+            options={categories}
+          />
+        </div>
+        <div>
+          <div>
+            <div className="flex items-center justify-start">
+              <IconBadge icon={ListChecks} />
+              Course Chapter
+            </div>
+            <div className="flex items-center justify-start">
+              <IconBadge icon={DollarSign} />
+              Course Price
+            </div>
+          </div>
         </div>
       </div>
     </div>

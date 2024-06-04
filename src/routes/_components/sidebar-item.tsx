@@ -11,7 +11,7 @@ interface SideBarItemProps {
 
 const SideBarItem = ({ icon: Icon, href, label }: SideBarItemProps) => {
   const navigate = useNavigate();
-  let location = useLocation();
+  const location = useLocation();
 
   const handleClick = () => {
     navigate(href);
