@@ -1,8 +1,8 @@
 import { Outlet, useNavigate } from "react-router-dom";
 import { ClerkProvider } from "@clerk/clerk-react";
-import SideBar from "@/routes/_components/sidebar";
+import SideBar from "@/pages/_components/sidebar";
 import "./index.css";
-import Navbar from "@/routes/_components/navbar";
+import Navbar from "@/pages/_components/navbar";
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 

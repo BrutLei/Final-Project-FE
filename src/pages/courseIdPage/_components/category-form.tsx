@@ -7,6 +7,7 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
+import { cn } from "@/lib/utils";
 
 import axios from "@/services/CustomAxios";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -104,7 +105,18 @@ const CategoryForm = ({
           </form>
         </Form>
       ) : (
-        <p className="text-sm mt-2 italic">No category</p>
+        <p
+          className={cn(
+            "text-sm mt-2",
+            !initialData.categoryId && "text-slate-500 italic"
+          )}
+        >
+          {initialData.categoryId
+            ? options.find((category) => {
+                return category.value === initialData.categoryId;
+              })?.label
+            : "Not set yet"}
+        </p>
       )}
     </div>
   );

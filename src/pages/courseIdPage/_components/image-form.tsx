@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ImageIcon, Pencil, PlusCircle } from "lucide-react";
 
-import FileUpload from "./file-upload";
+import ImageUpload from "./image-upload";
 
 interface ImageFormProps {
   initialData: {
@@ -54,7 +54,7 @@ const ImageForm = ({ initialData, courseId, userId }: ImageFormProps) => {
         ))}
       {isEditing && (
         <div>
-          <FileUpload
+          <ImageUpload
             userId={String(userId)}
             courseId={String(courseId)}
             previewSrc={`${initialData?.imageUrl}`}

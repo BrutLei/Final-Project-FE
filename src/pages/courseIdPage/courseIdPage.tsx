@@ -1,7 +1,7 @@
 import { IconBadge } from "@/components/icon-badge";
 import axios from "@/services/CustomAxios";
 import { useAuth } from "@clerk/clerk-react";
-import { DollarSign, LayoutDashboard, ListChecks } from "lucide-react";
+import { DollarSign, File, LayoutDashboard, ListChecks } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import TitleForm from "./_components/title-form";
@@ -9,6 +9,9 @@ import DescriptionForm from "./_components/description-form";
 import ImageForm from "./_components/image-form";
 import CategoryForm from "./_components/category-form";
 import { useCookies } from "react-cookie";
+import PriceForm from "./_components/price-form";
+import AttachmentForm from "./_components/attachment-form";
+import ChapterForm from "./_components/chapter-form";
 
 // import { useCookies } from "react-cookie";
 
@@ -31,12 +34,38 @@ interface ICategory {
 }
 interface ICategories extends Array<ICategory> {}
 
+interface IAttachment {
+  id: string;
+  name: string;
+  url: string;
+}
+
+interface IChapter {
+  id: string;
+  title: string;
+  description: string | null;
+  videoUrl: string | null;
+  position: number;
+  isPublished: boolean;
+  isFree: boolean;
+  courseId: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+export interface IChapters extends Array<IChapter | null> {}
+
+export interface IAttachments extends Array<IAttachment> {}
+
 const CourseIdPage = () => {
   const { isSignedIn, isLoaded, userId } = useAuth();
   const [cookies] = useCookies();
   const { id } = useParams();
+
   const [course, setCourse] = useState<ICourse>();
   const [categories, setCategories] = useState<ICategories>([]);
+  const [attachments, setAttachments] = useState<IAttachments>([]);
+  const [chapters, setChapters] = useState<IChapters>([]);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const navigate = useNavigate();
   const fetchCourse = async () => {
@@ -60,9 +89,27 @@ const CourseIdPage = () => {
           value: category.id,
         })
       );
-      console.log(categoriesList);
-
       setCategories(categoriesList);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const fetchAttachment = async () => {
+    try {
+      const res = await axios.get(`/api/attachments/${id}`);
+      setAttachments(res.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const fetchChapters = async () => {
+    try {
+      const res = await axios.get(`/api/courses/${id}/chapters`, {
+        headers: { Authorization: cookies.__clerk_db_jwt },
+      });
+      setChapters(res.data);
     } catch (error) {
       console.error(error);
     }
@@ -74,6 +121,7 @@ const CourseIdPage = () => {
     course.imageUrl,
     course.price,
     course.categoryId,
+    chapters.some((chapter) => chapter?.isPublished),
   ];
 
   const totalFields = requiredFields?.length;
@@ -84,7 +132,9 @@ const CourseIdPage = () => {
   useEffect(() => {
     fetchCourse();
     fetchCategories();
-  }, []);
+    fetchAttachment();
+    fetchChapters();
+  }, [isRefreshing]);
 
   if (!isLoaded) {
     return <div>Loading...</div>;
@@ -132,16 +182,40 @@ const CourseIdPage = () => {
             options={categories}
           />
         </div>
-        <div>
+        <div className="space-y-6">
           <div>
             <div className="flex items-center gap-x-2">
               <IconBadge icon={ListChecks} />
-              Course Chapter
+              <p className="text-xl">Course Chapter</p>
             </div>
-            <div className="flex items-center justify-start gap-x-2">
+            <ChapterForm
+              initialData={{ chapters: chapters }}
+              courseId={course?.id}
+              userId={userId}
+              onRefresh={() => setIsRefreshing(!isRefreshing)}
+            />
+          </div>
+          <div>
+            <div className="flex items-center gap-x-2">
               <IconBadge icon={DollarSign} />
-              Course Price
+              <p className="text-xl">Sell your course</p>
             </div>
+            <PriceForm
+              initialData={{ price: course?.price || 0 }}
+              courseId={course?.id}
+              userId={userId}
+            />
+          </div>
+          <div>
+            <div className="flex items-center gap-x-2">
+              <IconBadge icon={File} />
+              <p className="text-xl">Resources & Attachment</p>
+            </div>
+            <AttachmentForm
+              initialData={attachments}
+              courseId={course?.id}
+              userId={userId}
+            />
           </div>
         </div>
       </div>

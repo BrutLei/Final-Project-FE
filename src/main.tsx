@@ -5,12 +5,13 @@ import { CookiesProvider } from "react-cookie";
 import { Toaster } from "react-hot-toast";
 import "./index.css";
 import RootLayout from "./layouts/root-layout";
-import HelloPage from "./routes/helloWorld";
-import SearchPage from "./routes/searchPage";
-import TeacherPage from "./routes/teacherPage";
-import CoursePage from "./routes/courses";
-import CreatePage from "./routes/createPage";
-import CourseIdPage from "./routes/courseIdPage/courseIdPage";
+import HelloPage from "./pages/helloWorld";
+import SearchPage from "./pages/searchPage";
+import TeacherPage from "./pages/teacherPage";
+import CoursePage from "./pages/courses";
+import CreatePage from "./pages/createPage";
+import CourseIdPage from "./pages/courseIdPage/courseIdPage";
+import ChapterPage from "./pages/chapterPage";
 
 // Import the layouts
 
@@ -35,6 +36,7 @@ const router = createBrowserRouter([
           { path: "", element: <TeacherPage /> },
           { path: "courses", element: <CoursePage /> },
           { path: "courses/:id", element: <CourseIdPage /> },
+          { path: "courses/:id/chapter/:chapterId", element: <ChapterPage /> },
           { path: "create", element: <CreatePage /> },
         ],
       },

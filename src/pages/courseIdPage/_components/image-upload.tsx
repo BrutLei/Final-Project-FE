@@ -5,7 +5,7 @@ import { useDropzone } from "react-dropzone";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
-const FileUpload = ({
+const ImageUpload = ({
   courseId,
   userId,
   previewSrc,
@@ -104,4 +104,4 @@ const FileUpload = ({
   );
 };
 
-export default FileUpload;
+export default ImageUpload;
