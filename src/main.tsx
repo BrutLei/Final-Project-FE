@@ -11,7 +11,7 @@ import TeacherPage from "./pages/teacherPage";
 import CoursePage from "./pages/courses";
 import CreatePage from "./pages/createPage";
 import CourseIdPage from "./pages/courseIdPage/courseIdPage";
-import ChapterPage from "./pages/chapterPage";
+import ChapterIdPage from "./pages/chapterIdPage/chapterIdPage";
 
 // Import the layouts
 
@@ -36,7 +36,10 @@ const router = createBrowserRouter([
           { path: "", element: <TeacherPage /> },
           { path: "courses", element: <CoursePage /> },
           { path: "courses/:id", element: <CourseIdPage /> },
-          { path: "courses/:id/chapter/:chapterId", element: <ChapterPage /> },
+          {
+            path: "courses/:courseId/chapter/:chapterId",
+            element: <ChapterIdPage />,
+          },
           { path: "create", element: <CreatePage /> },
         ],
       },
