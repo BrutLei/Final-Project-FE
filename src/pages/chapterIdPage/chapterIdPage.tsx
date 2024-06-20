@@ -10,6 +10,7 @@ import { IconBadge } from "@/components/icon-badge";
 import ChapterTitleForm from "./_components/chapter-title-form";
 import ChapterDescriptionForm from "./_components/chapter-description-form";
 import ChapterAccessForm from "./_components/chapter-access-form";
+import VideoForm from "./_components/chapter-video-form";
 
 const ChapterIdPage = () => {
   interface IChapter {
@@ -122,6 +123,12 @@ const ChapterIdPage = () => {
             <IconBadge icon={Video} />
             <p className="text-lg">Add a video</p>
           </div>
+          <VideoForm
+            initialData={{ videoUrl: chapter.videoUrl ? chapter.videoUrl : "" }}
+            chapterId={chapterId}
+            courseId={courseId}
+            userId={userId}
+          />
         </div>
       </div>
     </div>
