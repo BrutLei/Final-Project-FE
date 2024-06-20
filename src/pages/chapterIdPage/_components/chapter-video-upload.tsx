@@ -82,7 +82,7 @@ const VideoUpload = ({
       setUploading(true);
       const res = await axios.put(
         `/api/courses/${courseId}/chapters/${chapterId}/remove-video`,
-        { userId },
+        { userId, videoUrl: previewSrc },
         { headers: { Authorization: cookies.__clerk_db_jwt } }
       );
       if (res) {
@@ -98,13 +98,13 @@ const VideoUpload = ({
   };
 
   return (
-    <div className="flex flex-col items-center gap-x-2 single-image-upload border border-dashed border-[#cccccc] p-5 text-center my-5 mx-auto rounded-lg">
-      <div className="w-full">
-        <div {...getRootProps({ className: "cursor-pointer" })}>
+    <div className="single-image-upload border border-dashed border-[#cccccc] p-5 text-center my-5 mx-auto rounded-lg">
+      <div className="relative inline-block w-full">
+        <div>
           {uploading ? <></> : <input {...getInputProps()} />}
           {preview ? (
             preview && (
-              <div className="w-full">
+              <div className="relative inline-block w-full">
                 {uploading ? (
                   <div className="aspect-video bg-black bg-opacity-50 w-full flex items-center justify-center">
                     <Loader2 className="animate-spin h-8 w-8 text-secondary" />
@@ -114,28 +114,45 @@ const VideoUpload = ({
                     src={`http://localhost:3000/api/courses/videos/${previewSrc}`}
                     width="100%"
                     height="auto"
+                    className="w-full rounded-md"
                   />
                 )}
               </div>
             )
           ) : (
-            <div className="flex flex-col justify-center items-center">
+            <div
+              {...getRootProps({ className: "cursor-pointer" })}
+              className="flex flex-col justify-center items-center"
+            >
               <CloudUploadIcon size={48} />
               <p className="text-blue-500 hover:text-blue-700 transition-colors cursor-pointer mt-2">
+                {uploading ? <></> : <input {...getInputProps()} />}
                 Choose a video or drag and drop
               </p>
             </div>
           )}
         </div>
+        {preview && !uploading ? (
+          <>
+            <button
+              onClick={handleRemoveImage}
+              {...getRootProps({ className: "cursor-pointer" })}
+              className="absolute top-[5px] right-[5px] mr-20 bg-green-500 text-white px-2 py-1 rounded-md hover:bg-green-600 transition-colors"
+            >
+              {uploading ? <></> : <input {...getInputProps()} />}
+              Change
+            </button>
+            <button
+              onClick={handleRemoveImage}
+              className="absolute top-[5px] right-[5px] bg-red-500 text-white px-2 py-1 rounded-md hover:bg-red-600 transition-colors"
+            >
+              Remove
+            </button>
+          </>
+        ) : (
+          <></>
+        )}
       </div>
-      {preview && (
-        <button
-          onClick={handleRemoveImage}
-          className=" bg-red-500 text-white px-4 py-2 mt-2 rounded-md hover:bg-red-600 transition-colors"
-        >
-          Remove
-        </button>
-      )}
       {video && (
         <div className="mt-[10px] text-left">
           <p>Video Name: {video.name}</p>

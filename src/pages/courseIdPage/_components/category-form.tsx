@@ -14,7 +14,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 
 const formSchema = z.object({
@@ -34,6 +33,7 @@ type CategoryFormProps = {
   userId: string;
   courseId: string;
   options: Categories;
+  onRefresh: () => void;
 };
 
 const CategoryForm = ({
@@ -41,6 +41,7 @@ const CategoryForm = ({
   userId,
   courseId,
   options,
+  onRefresh,
 }: CategoryFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
 
@@ -50,13 +51,13 @@ const CategoryForm = ({
   });
 
   const { isSubmitting, isValid } = form.formState;
-  const navigate = useNavigate();
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
       console.log({ userId, ...data });
       await axios.patch(`/api/courses/${courseId}`, { userId, data: data });
-      navigate(0);
+      toggleEdit();
+      onRefresh();
       toast.success("Course updated successfully");
     } catch (error) {
       toast.error("Something went wrong. Please try again.");

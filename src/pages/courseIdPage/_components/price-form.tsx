@@ -3,7 +3,6 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 
 import axios from "@/services/CustomAxios";
 
@@ -27,15 +26,20 @@ interface PriceFormProps {
   };
   courseId: string | undefined;
   userId: string | undefined;
+  onRefresh: () => void;
 }
 
 const formSchema = z.object({
   price: z.coerce.number(),
 });
 
-const PriceForm = ({ initialData, courseId, userId }: PriceFormProps) => {
+const PriceForm = ({
+  initialData,
+  courseId,
+  userId,
+  onRefresh,
+}: PriceFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
-  const navigate = useNavigate();
 
   const toggleEdit = () => setIsEditing((current) => !current);
 
@@ -50,7 +54,7 @@ const PriceForm = ({ initialData, courseId, userId }: PriceFormProps) => {
       console.log({ userId, ...data });
       await axios.patch(`/api/courses/${courseId}`, { userId, data: data });
       toggleEdit();
-      navigate(0);
+      onRefresh();
       toast.success("Course updated successfully");
     } catch (error) {
       toast.error("Something went wrong. Please try again.");

@@ -69,7 +69,7 @@ const ChapterForm = ({
       );
       toast.success("Chapter created successfully");
       toggleCreating();
-      navigate(0);
+      onRefresh();
     } catch (error) {
       toast.error("Something went wrong. Please try again.");
     }

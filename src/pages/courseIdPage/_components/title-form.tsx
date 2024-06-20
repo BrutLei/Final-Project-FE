@@ -15,7 +15,6 @@ import { Button } from "@/components/ui/button";
 import { Pencil } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 
 interface TitleFormProps {
   initialData: {
@@ -23,15 +22,20 @@ interface TitleFormProps {
   };
   courseId: string | undefined;
   userId: string | undefined;
+  onRefresh: () => void;
 }
 
 const formSchema = z.object({
   title: z.string().min(1, { message: "Title is required" }),
 });
 
-const TitleForm = ({ initialData, courseId, userId }: TitleFormProps) => {
+const TitleForm = ({
+  initialData,
+  courseId,
+  userId,
+  onRefresh,
+}: TitleFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
-  const navigate = useNavigate();
 
   const toggleEdit = () => setIsEditing((current) => !current);
 
@@ -48,7 +52,7 @@ const TitleForm = ({ initialData, courseId, userId }: TitleFormProps) => {
       await axios.patch(`/api/courses/${courseId}`, { userId, data: data });
       toast.success("Course updated successfully");
       toggleEdit();
-      navigate(0);
+      onRefresh();
     } catch (error) {
       toast.error("Something went wrong. Please try again.");
     }

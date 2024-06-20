@@ -164,11 +164,13 @@ const CourseIdPage = () => {
             initialData={{ title: course?.title }}
             courseId={course?.id}
             userId={userId}
+            onRefresh={() => setIsRefreshing(!isRefreshing)}
           />
           <DescriptionForm
             initialData={{ description: course?.description || "" }}
             courseId={course?.id}
             userId={userId}
+            onRefresh={() => setIsRefreshing(!isRefreshing)}
           />
           <ImageForm
             initialData={{ imageUrl: course?.imageUrl || "" }}
@@ -180,6 +182,7 @@ const CourseIdPage = () => {
             courseId={course?.id || ""}
             userId={userId}
             options={categories}
+            onRefresh={() => setIsRefreshing(!isRefreshing)}
           />
         </div>
         <div className="space-y-6">
@@ -204,6 +207,7 @@ const CourseIdPage = () => {
               initialData={{ price: course?.price || 0 }}
               courseId={course?.id}
               userId={userId}
+              onRefresh={() => setIsRefreshing(!isRefreshing)}
             />
           </div>
           <div>

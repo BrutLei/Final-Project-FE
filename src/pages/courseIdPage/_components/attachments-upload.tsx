@@ -33,7 +33,7 @@ const AttachmentUpload = ({
         setFileList([]);
         navigate(0);
       }
-      toast.success("Image uploaded successfully");
+      toast.success("Attachments uploaded successfully");
     } catch (error) {
       toast.error("Something went wrong. Please try again.");
     }
