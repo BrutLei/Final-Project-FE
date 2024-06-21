@@ -50,7 +50,6 @@ const DescriptionForm = ({
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
-      console.log({ userId, ...data });
       await axios.patch(`/api/courses/${courseId}`, { userId, data: data });
       toggleEdit();
       onRefresh();
