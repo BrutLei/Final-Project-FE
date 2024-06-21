@@ -16,8 +16,6 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Pencil } from "lucide-react";
-
-import { useCookies } from "react-cookie";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 
@@ -43,7 +41,6 @@ const ChapterAccessForm = ({
   setChange,
 }: ChapterAccessFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [cookies] = useCookies();
 
   const toggleEdit = () => setIsEditing((current) => !current);
 
@@ -56,16 +53,10 @@ const ChapterAccessForm = ({
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
       console.log({ userId, ...data });
-      await axios.patch(
-        `/api/courses/${courseId}/chapters/${chapterId} `,
-        {
-          userId,
-          data: data,
-        },
-        {
-          headers: { Authorization: cookies.__clerk_db_jwt },
-        }
-      );
+      await axios.patch(`/api/courses/${courseId}/chapters/${chapterId} `, {
+        userId,
+        data: data,
+      });
 
       toggleEdit();
       toast.success("Chapter updated successfully");

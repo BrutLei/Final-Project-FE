@@ -8,12 +8,9 @@ import TitleForm from "./_components/title-form";
 import DescriptionForm from "./_components/description-form";
 import ImageForm from "./_components/image-form";
 import CategoryForm from "./_components/category-form";
-import { useCookies } from "react-cookie";
 import PriceForm from "./_components/price-form";
 import AttachmentForm from "./_components/attachment-form";
 import ChapterForm from "./_components/chapter-form";
-
-// import { useCookies } from "react-cookie";
 
 interface ICourse {
   description: string | null;
@@ -58,7 +55,7 @@ export interface IAttachments extends Array<IAttachment> {}
 
 const CourseIdPage = () => {
   const { isSignedIn, isLoaded, userId } = useAuth();
-  const [cookies] = useCookies();
+
   const { id } = useParams();
 
   const [course, setCourse] = useState<ICourse>();
@@ -80,9 +77,7 @@ const CourseIdPage = () => {
   };
   const fetchCategories = async () => {
     try {
-      const res = await axios.get("/api/categories", {
-        headers: { Authorization: cookies.__clerk_db_jwt },
-      });
+      const res = await axios.get("/api/categories");
       const categoriesList = res.data.map(
         (category: { id: string; name: string }) => ({
           label: category.name,
@@ -106,9 +101,7 @@ const CourseIdPage = () => {
 
   const fetchChapters = async () => {
     try {
-      const res = await axios.get(`/api/courses/${id}/chapters`, {
-        headers: { Authorization: cookies.__clerk_db_jwt },
-      });
+      const res = await axios.get(`/api/courses/${id}/chapters`);
       setChapters(res.data);
     } catch (error) {
       console.error(error);

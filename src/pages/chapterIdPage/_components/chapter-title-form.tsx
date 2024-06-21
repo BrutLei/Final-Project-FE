@@ -16,8 +16,6 @@ import { Pencil } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
-import { useCookies } from "react-cookie";
-
 interface ChapterTitleFormProps {
   initialData: {
     title: string | undefined;
@@ -40,7 +38,6 @@ const ChapterTitleForm = ({
   setChange,
 }: ChapterTitleFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [cookies] = useCookies();
 
   const toggleEdit = () => setIsEditing((current) => !current);
 
@@ -54,16 +51,10 @@ const ChapterTitleForm = ({
     try {
       console.log({ userId, ...data });
 
-      await axios.patch(
-        `/api/courses/${courseId}/chapters/${chapterId} `,
-        {
-          userId,
-          data: data,
-        },
-        {
-          headers: { Authorization: cookies.__clerk_db_jwt },
-        }
-      );
+      await axios.patch(`/api/courses/${courseId}/chapters/${chapterId} `, {
+        userId,
+        data: data,
+      });
       setChange();
       toast.success("Chapter updated successfully");
       toggleEdit();

@@ -20,7 +20,6 @@ import { Loader, PlusCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { IChapters } from "../courseIdPage";
 import { Input } from "@/components/ui/input";
-import { useCookies } from "react-cookie";
 import ChaptersList from "./chapter-list";
 
 interface ChapterFormProps {
@@ -44,7 +43,7 @@ const ChapterForm = ({
 }: ChapterFormProps) => {
   const [isCreating, setIsCreating] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
-  const [cookies] = useCookies();
+
   const navigate = useNavigate();
 
   const toggleCreating = () => setIsCreating((current) => !current);
@@ -57,16 +56,10 @@ const ChapterForm = ({
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
-      await axios.post(
-        `/api/courses/${courseId}/chapters`,
-        {
-          userId,
-          title: data.title,
-        },
-        {
-          headers: { Authorization: cookies.__clerk_db_jwt },
-        }
-      );
+      await axios.post(`/api/courses/${courseId}/chapters`, {
+        userId,
+        title: data.title,
+      });
       toast.success("Chapter created successfully");
       toggleCreating();
       onRefresh();
@@ -80,16 +73,10 @@ const ChapterForm = ({
   ) => {
     try {
       setIsUpdating(true);
-      await axios.put(
-        `/api/courses/${courseId}/chapters/reorder`,
-        {
-          userId,
-          chapters: updateData,
-        },
-        {
-          headers: { Authorization: cookies.__clerk_db_jwt },
-        }
-      );
+      await axios.put(`/api/courses/${courseId}/chapters/reorder`, {
+        userId,
+        chapters: updateData,
+      });
       onRefresh();
       toast.success("Chapters reordered successfully");
     } catch (error) {

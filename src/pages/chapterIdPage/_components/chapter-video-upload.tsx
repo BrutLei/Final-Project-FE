@@ -2,7 +2,6 @@ import HLSPlayer from "@/components/video-player";
 import axios from "@/services/CustomAxios";
 import { CloudUploadIcon, Loader2 } from "lucide-react";
 import { useState, useCallback } from "react";
-import { useCookies } from "react-cookie";
 import { useDropzone } from "react-dropzone";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -22,7 +21,6 @@ const VideoUpload = ({
   const [video, setVideo] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(previewSrc);
   const [uploading, setUploading] = useState(false);
-  const [cookies] = useCookies();
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     try {
@@ -82,8 +80,7 @@ const VideoUpload = ({
       setUploading(true);
       const res = await axios.put(
         `/api/courses/${courseId}/chapters/${chapterId}/remove-video`,
-        { userId, videoUrl: previewSrc },
-        { headers: { Authorization: cookies.__clerk_db_jwt } }
+        { userId, videoUrl: previewSrc }
       );
       if (res) {
         setUploading(false);

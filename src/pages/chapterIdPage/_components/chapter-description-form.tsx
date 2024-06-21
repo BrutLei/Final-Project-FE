@@ -18,7 +18,6 @@ import { Pencil } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
-import { useCookies } from "react-cookie";
 import Editor from "@/components/editor";
 import Preview from "@/components/preview";
 
@@ -44,7 +43,6 @@ const ChapterDescriptionForm = ({
   setChange,
 }: ChapterDescriptionFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [cookies] = useCookies();
 
   const toggleEdit = () => setIsEditing((current) => !current);
 
@@ -57,16 +55,10 @@ const ChapterDescriptionForm = ({
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
       console.log({ userId, ...data });
-      await axios.patch(
-        `/api/courses/${courseId}/chapters/${chapterId} `,
-        {
-          userId,
-          data: data,
-        },
-        {
-          headers: { Authorization: cookies.__clerk_db_jwt },
-        }
-      );
+      await axios.patch(`/api/courses/${courseId}/chapters/${chapterId} `, {
+        userId,
+        data: data,
+      });
 
       toggleEdit();
       toast.success("Chapter updated successfully");

@@ -5,7 +5,6 @@ import axios from "@/services/CustomAxios";
 import { ArrowLeft, Eye, LayoutDashboard, Video } from "lucide-react";
 import toast from "react-hot-toast";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
-import { useCookies } from "react-cookie";
 import { IconBadge } from "@/components/icon-badge";
 import ChapterTitleForm from "./_components/chapter-title-form";
 import ChapterDescriptionForm from "./_components/chapter-description-form";
@@ -23,7 +22,6 @@ const ChapterIdPage = () => {
   const { isSignedIn, isLoaded, userId } = useAuth();
   const { courseId, chapterId } = useParams();
 
-  const [cookies] = useCookies();
   const navigate = useNavigate();
 
   const [change, setChange] = useState(false);
@@ -37,10 +35,7 @@ const ChapterIdPage = () => {
   const fetchChapter = async () => {
     try {
       const res = await axios.get(
-        `api/courses/${courseId}/chapters/${chapterId}`,
-        {
-          headers: { Authorization: cookies.__clerk_db_jwt },
-        }
+        `api/courses/${courseId}/chapters/${chapterId}`
       );
       if (res && res.data) {
         setChapter(res.data);

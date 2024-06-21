@@ -18,16 +18,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import toast from "react-hot-toast";
 import { useAuth } from "@clerk/clerk-react";
-import { useCookies } from "react-cookie";
 
 const formSchema = z.object({
   title: z.string().min(1, { message: "Title is required" }),
 });
 
 const CreatePage = () => {
-  // access the cookies
-  const [cookies] = useCookies();
-
   const { userId } = useAuth();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -40,14 +36,10 @@ const CreatePage = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const response = await axios.post(
-        "/api/courses",
-        {
-          title: values.title,
-          userId,
-        },
-        { headers: { Authorization: cookies.__clerk_db_jwt } }
-      );
+      const response = await axios.post("/api/courses", {
+        title: values.title,
+        userId,
+      });
 
       navigate(`/teacher/courses/${response.data.id}`);
       toast.success("Course created successfully");
