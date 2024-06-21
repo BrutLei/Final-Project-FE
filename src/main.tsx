@@ -8,10 +8,10 @@ import RootLayout from "./layouts/root-layout";
 import HelloPage from "./pages/helloWorld";
 import SearchPage from "./pages/searchPage";
 import TeacherPage from "./pages/teacherPage";
-import CoursePage from "./pages/courses";
 import CreatePage from "./pages/createPage";
 import CourseIdPage from "./pages/courseIdPage/courseIdPage";
 import ChapterIdPage from "./pages/chapterIdPage/chapterIdPage";
+import CoursePage from "./pages/coursesPage/courses";
 
 // Import the layouts
 
