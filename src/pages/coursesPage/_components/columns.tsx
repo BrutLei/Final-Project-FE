@@ -83,7 +83,7 @@ export const columns: ColumnDef<Course>[] = [
             <DropdownMenuItem>
               <button
                 onClick={() => navigate(`/teacher/courses/${id}`)}
-                className="flex items-center justify-between w-auto p-0 text-sm text-gray-700 hover:bg-gray-100"
+                className="flex items-center justify-between w-full p-0 text-sm text-gray-700 hover:bg-gray-100"
               >
                 <Pencil className="mr-2 h-4 w-4" />
                 Edit
