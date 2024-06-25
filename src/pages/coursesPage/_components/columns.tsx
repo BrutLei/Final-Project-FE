@@ -8,9 +8,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useNavigate } from "react-router-dom";
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
 export type Course = {
   id: string;
   userId: string;
@@ -50,6 +50,14 @@ export const columns: ColumnDef<Course>[] = [
         </Button>
       );
     },
+    cell: ({ row }) => {
+      const { price } = row.original || 0;
+      const formattedPrice = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+      }).format(price);
+      return <span>{formattedPrice}</span>;
+    },
   },
   {
     accessorKey: "isPublished",
@@ -64,6 +72,14 @@ export const columns: ColumnDef<Course>[] = [
         </Button>
       );
     },
+    cell: ({ row }) => {
+      const { isPublished } = row.original || false;
+      return (
+        <Badge className={cn("bg-slate-500", isPublished && "bg-sky-700")}>
+          {isPublished ? "Published" : "Draft"}{" "}
+        </Badge>
+      );
+    },
   },
   {
     id: "actions",
@@ -76,14 +92,14 @@ export const columns: ColumnDef<Course>[] = [
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
               <span className="sr-only">Open Menu</span>
-              <MoreHorizontal />
+              <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem>
               <button
                 onClick={() => navigate(`/teacher/courses/${id}`)}
-                className="flex items-center justify-between w-full p-0 text-sm text-gray-700 hover:bg-gray-100"
+                className="flex items-center justify-start w-full p-0 text-sm text-gray-700 hover:bg-gray-100"
               >
                 <Pencil className="mr-2 h-4 w-4" />
                 Edit

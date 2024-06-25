@@ -1,7 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
-import { CookiesProvider } from "react-cookie";
 import { Toaster } from "react-hot-toast";
 import "./index.css";
 import RootLayout from "./layouts/root-layout";
@@ -50,9 +49,7 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <CookiesProvider>
-      <RouterProvider router={router} />
-    </CookiesProvider>
+    <RouterProvider router={router} />
     <Toaster />
   </React.StrictMode>
 );

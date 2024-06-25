@@ -18,7 +18,7 @@ import toast from "react-hot-toast";
 
 interface TitleFormProps {
   initialData: {
-    title: string | undefined;
+    title: string;
   };
   courseId: string | undefined;
   userId: string | undefined;
@@ -36,7 +36,6 @@ const TitleForm = ({
   onRefresh,
 }: TitleFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
-
   const toggleEdit = () => setIsEditing((current) => !current);
 
   const form = useForm<z.infer<typeof formSchema>>({
