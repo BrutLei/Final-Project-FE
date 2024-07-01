@@ -15,8 +15,8 @@ const CoursePage = () => {
   const [data, setData] = useState<Course[]>([]);
 
   const fetchCourses = async () => {
-    const response = await axios.get(`/api/courses/get-courses`, {
-      data: { userId },
+    const response = await axios.get(`/api/courses/get-list`, {
+      data: { userId: userId },
     });
     setData(response.data);
   };

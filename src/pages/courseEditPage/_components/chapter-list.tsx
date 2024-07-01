@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { IChapters } from "../courseIdPage";
+import { IChapters } from "../courseEditPage";
 import {
   DragDropContext,
   Droppable,

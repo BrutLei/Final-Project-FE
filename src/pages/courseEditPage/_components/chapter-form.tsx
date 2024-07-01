@@ -18,7 +18,7 @@ import { Button } from "@/components/ui/button";
 import { Loader, PlusCircle } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import { IChapters } from "../courseIdPage";
+import { IChapters } from "../courseEditPage";
 import { Input } from "@/components/ui/input";
 import ChaptersList from "./chapter-list";
 

@@ -93,6 +93,7 @@ const ChapterIdPage = () => {
                 courseId={courseId}
                 chapterId={chapterId}
                 isPublished={chapter.isPublished}
+                setChange={() => setChange(!change)}
               />
             </div>
           </div>

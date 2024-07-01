@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { File, Loader2, PlusCircle, X } from "lucide-react";
 
-import { IAttachments } from "../courseIdPage";
+import { IAttachments } from "../courseEditPage";
 import toast from "react-hot-toast";
 import axios from "@/services/CustomAxios";
 import { useNavigate } from "react-router-dom";

@@ -7,21 +7,19 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
-interface ChapterActionsProps {
+interface CourseActionsProps {
   disabled: boolean;
   courseId: string | undefined;
-  chapterId: string | undefined;
   isPublished: boolean | undefined;
   setChange: () => void;
 }
 
-const ChapterActions = ({
+const CourseActions = ({
   disabled,
   courseId,
-  chapterId,
   isPublished,
   setChange,
-}: ChapterActionsProps) => {
+}: CourseActionsProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const { userId } = useAuth();
   const navigate = useNavigate();
@@ -29,12 +27,12 @@ const ChapterActions = ({
   const onDelete = async () => {
     setIsLoading(true);
     try {
-      await axios.delete(`api/courses/${courseId}/chapters/${chapterId}`, {
+      await axios.delete(`api/courses/${courseId}`, {
         data: { userId: userId },
       });
-      toast.success("Chapter deleted successfully");
+      toast.success("Course deleted successfully");
     } catch (error) {
-      toast.error("Failed to delete chapter");
+      toast.error("Failed to delete course");
     } finally {
       setIsLoading(false);
       navigate(`/teacher/courses/${courseId}`);
@@ -45,22 +43,16 @@ const ChapterActions = ({
     try {
       setIsLoading(true);
       if (isPublished) {
-        await axios.patch(
-          `api/courses/${courseId}/chapters/${chapterId}/unpublish`,
-          {
-            userId: userId,
-          }
-        );
-        toast.success("Chapter unpublished");
+        await axios.patch(`api/courses/${courseId}/unpublish`, {
+          userId: userId,
+        });
+        toast.success("Course unpublished");
         setChange();
       } else {
-        await axios.patch(
-          `api/courses/${courseId}/chapters/${chapterId}/publish`,
-          {
-            userId: userId,
-          }
-        );
-        toast.success("Chapter published");
+        await axios.patch(`api/courses/${courseId}/publish`, {
+          userId: userId,
+        });
+        toast.success("Course published");
         setChange();
       }
     } catch (error) {
@@ -89,4 +81,4 @@ const ChapterActions = ({
   );
 };
 
-export default ChapterActions;
+export default CourseActions;

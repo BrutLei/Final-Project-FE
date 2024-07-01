@@ -7,9 +7,12 @@ interface EditorProps {
 }
 const Editor = ({ onChange, value }: EditorProps) => {
   return (
-    <div className="bg-white">
-      <ReactQuill theme="snow" value={value} onChange={onChange} />
-    </div>
+    <ReactQuill
+      className="bg-white"
+      theme="snow"
+      value={value}
+      onChange={onChange}
+    />
   );
 };
 

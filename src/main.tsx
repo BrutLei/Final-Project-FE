@@ -2,19 +2,22 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
+import { ClerkProvider } from "@clerk/clerk-react";
 import "./index.css";
-import RootLayout from "./layouts/root-layout";
-import HelloPage from "./pages/helloWorld";
-import SearchPage from "./pages/searchPage";
-import TeacherPage from "./pages/teacherPage";
-import CreatePage from "./pages/createPage";
-import CourseIdPage from "./pages/courseIdPage/courseIdPage";
-import ChapterIdPage from "./pages/chapterIdPage/chapterIdPage";
-import CoursePage from "./pages/coursesPage/courses";
 
 // Import the layouts
+import RootLayout from "./layouts/root-layout";
 
 // Import the components
+import HelloPage from "./pages/helloWorld";
+import SearchPage from "./pages/searchPage/searchPage";
+import TeacherPage from "./pages/teacherPage";
+import CreatePage from "./pages/createPage";
+import CourseIdPage from "./pages/courseEditPage/courseEditPage";
+import ChapterIdPage from "./pages/chapterIdPage/chapterIdPage";
+import CoursePage from "./pages/coursesPage/courses";
+import CourseLearningPage from "./pages/courseLearningPage";
+import CourseLayout from "./layouts/course-layout";
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
@@ -45,11 +48,26 @@ const router = createBrowserRouter([
       { path: "*", element: <div>Not Found</div> },
     ],
   },
+  {
+    element: <CourseLayout />,
+    children: [
+      {
+        path: "/course/:id/chapter/:courseId",
+        element: <CourseLearningPage />,
+      },
+    ],
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
-    <Toaster />
+    <ClerkProvider
+      routerPush={(to) => router.navigate(to)}
+      routerReplace={(to) => router.navigate(to, { replace: true })}
+      publishableKey={PUBLISHABLE_KEY}
+    >
+      <RouterProvider router={router} />
+      <Toaster />
+    </ClerkProvider>
   </React.StrictMode>
 );

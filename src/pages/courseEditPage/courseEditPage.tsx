@@ -11,6 +11,8 @@ import CategoryForm from "./_components/category-form";
 import PriceForm from "./_components/price-form";
 import AttachmentForm from "./_components/attachment-form";
 import ChapterForm from "./_components/chapter-form";
+import Banner from "@/components/banner";
+import CourseActions from "./_components/course-actions";
 
 interface ICourse {
   description: string | null;
@@ -119,6 +121,7 @@ const CourseIdPage = () => {
 
   const totalFields = requiredFields?.length;
   const completedFields = requiredFields?.filter(Boolean).length;
+  const isCompleted = completedFields === totalFields;
 
   const completedText = `${completedFields}/${totalFields}`;
 
@@ -138,85 +141,99 @@ const CourseIdPage = () => {
   }
 
   return (
-    <div className="p-6">
-      <div className="flex items-center justify-between">
-        <div className="flex flex-col gap-y-2">
-          <h1 className="text-2xl font-medium">Course Setup</h1>
-          <span className="text-sm text-slate-700">
-            Complete all fields {completedText}
-          </span>
-        </div>
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16">
-        <div>
-          <div className="flex items-center gap-x-2">
-            <IconBadge icon={LayoutDashboard} />
-            <h2 className="text-xl">Customize your course</h2>
+    <>
+      {!course?.isPublished && (
+        <Banner
+          label="This course is unpublished and will not be visible to students."
+          variant="warning"
+        />
+      )}
+      <div className="p-6">
+        <div className="flex items-center justify-between">
+          <div className="flex flex-col gap-y-2">
+            <h1 className="text-2xl font-medium">Course Setup</h1>
+            <span className="text-sm text-slate-700">
+              Complete all fields {completedText}
+            </span>
           </div>
-          <TitleForm
-            initialData={{ title: course?.title }}
+          <CourseActions
+            disabled={!isCompleted}
             courseId={course?.id}
-            userId={userId}
-            onRefresh={() => setIsRefreshing(!isRefreshing)}
-          />
-          <DescriptionForm
-            initialData={{ description: course?.description || "" }}
-            courseId={course?.id}
-            userId={userId}
-            onRefresh={() => setIsRefreshing(!isRefreshing)}
-          />
-          <ImageForm
-            initialData={{ imageUrl: course?.imageUrl || "" }}
-            courseId={course?.id}
-            userId={userId}
-          />
-          <CategoryForm
-            initialData={{ categoryId: course?.categoryId || "" }}
-            courseId={course?.id || ""}
-            userId={userId}
-            options={categories}
-            onRefresh={() => setIsRefreshing(!isRefreshing)}
+            isPublished={course?.isPublished}
+            setChange={() => setIsRefreshing(!isRefreshing)}
           />
         </div>
-        <div className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16">
           <div>
             <div className="flex items-center gap-x-2">
-              <IconBadge icon={ListChecks} />
-              <p className="text-xl">Course Chapter</p>
+              <IconBadge icon={LayoutDashboard} />
+              <h2 className="text-xl">Customize your course</h2>
             </div>
-            <ChapterForm
-              initialData={{ chapters: chapters }}
+            <TitleForm
+              initialData={{ title: course?.title || "" }}
               courseId={course?.id}
               userId={userId}
               onRefresh={() => setIsRefreshing(!isRefreshing)}
             />
-          </div>
-          <div>
-            <div className="flex items-center gap-x-2">
-              <IconBadge icon={DollarSign} />
-              <p className="text-xl">Sell your course</p>
-            </div>
-            <PriceForm
-              initialData={{ price: course?.price || 0 }}
+            <DescriptionForm
+              initialData={{ description: course?.description || "" }}
               courseId={course?.id}
               userId={userId}
               onRefresh={() => setIsRefreshing(!isRefreshing)}
             />
-          </div>
-          <div>
-            <div className="flex items-center gap-x-2">
-              <IconBadge icon={File} />
-              <p className="text-xl">Resources & Attachment</p>
-            </div>
-            <AttachmentForm
-              initialData={attachments}
+            <ImageForm
+              initialData={{ imageUrl: course?.imageUrl || "" }}
               courseId={course?.id}
               userId={userId}
             />
+            <CategoryForm
+              initialData={{ categoryId: course?.categoryId || "" }}
+              courseId={course?.id || ""}
+              userId={userId}
+              options={categories}
+              onRefresh={() => setIsRefreshing(!isRefreshing)}
+            />
+          </div>
+          <div className="space-y-6">
+            <div>
+              <div className="flex items-center gap-x-2">
+                <IconBadge icon={ListChecks} />
+                <p className="text-xl">Course Chapter</p>
+              </div>
+              <ChapterForm
+                initialData={{ chapters: chapters }}
+                courseId={course?.id}
+                userId={userId}
+                onRefresh={() => setIsRefreshing(!isRefreshing)}
+              />
+            </div>
+            <div>
+              <div className="flex items-center gap-x-2">
+                <IconBadge icon={DollarSign} />
+                <p className="text-xl">Sell your course</p>
+              </div>
+              <PriceForm
+                initialData={{ price: course?.price || 0 }}
+                courseId={course?.id}
+                userId={userId}
+                onRefresh={() => setIsRefreshing(!isRefreshing)}
+              />
+            </div>
+            <div>
+              <div className="flex items-center gap-x-2">
+                <IconBadge icon={File} />
+                <p className="text-xl">Resources & Attachment</p>
+              </div>
+              <AttachmentForm
+                initialData={attachments}
+                courseId={course?.id}
+                userId={userId}
+              />
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
