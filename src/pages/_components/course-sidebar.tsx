@@ -1,61 +1,25 @@
 import { cn } from "@/lib/utils";
-import axios from "@/services/CustomAxios";
-import { useAuth } from "@clerk/clerk-react";
 import { LockKeyhole, PlayCircle } from "lucide-react";
-import { useEffect, useState } from "react";
+
 import { useParams } from "react-router-dom";
 
-interface IChapter {
-  categoryId: string;
-  chapters: { id: string; title: string; isFree: boolean }[];
-  length: number;
-  createdAt: Date;
-  description: string;
-  id: string;
-  imageUrl: string;
-  isPublished: boolean;
-  isPurchase: boolean;
-  price: number;
+interface CourseSidebarProps {
   title: string;
-  updatedAt: Date;
-  userId: string;
+  isPurchase: boolean;
+  chapters: { id: string; title: string; isFree: boolean }[];
 }
 
-const CourseSidebar = () => {
-  const [course, setCourse] = useState<IChapter>({} as IChapter);
-  const { isLoaded, userId } = useAuth();
-  const { id, courseId } = useParams();
-
-  const fetchCourse = async () => {
-    if (userId) {
-      try {
-        const response = await axios.get(
-          `/api/courses/user/${userId}/get-course/${id}`
-        );
-        console.log(response.data);
-
-        setCourse(response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  };
-  useEffect(() => {
-    fetchCourse();
-  }, []);
-
-  if (!isLoaded) {
-    return <div>Loading...</div>;
-  }
+const CourseSidebar = ({ title, isPurchase, chapters }: CourseSidebarProps) => {
+  const { courseId } = useParams();
 
   return (
     <div className="w-full h-full border border-r shadow-sm overflow-y-auto">
       <div className="p-8 flex items-center justify-center border-b">
-        <h1 className="font-semibold text-lg md:text-xl">{course?.title}</h1>
+        <h1 className="font-semibold text-lg md:text-xl">{title}</h1>
       </div>
       <div className="flex flex-col w-full">
-        {course.isPurchase
-          ? course?.chapters?.map((chapter) => {
+        {isPurchase
+          ? chapters?.map((chapter) => {
               return (
                 <div
                   key={chapter.id}
@@ -69,7 +33,7 @@ const CourseSidebar = () => {
                 </div>
               );
             })
-          : course?.chapters?.map((chapter) => {
+          : chapters?.map((chapter) => {
               return (
                 <div
                   key={chapter.id}
