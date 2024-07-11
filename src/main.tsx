@@ -9,7 +9,6 @@ import "./index.css";
 import RootLayout from "./layouts/root-layout";
 
 // Import the components
-import HelloPage from "./pages/helloWorld";
 import SearchPage from "./pages/searchPage/searchPage";
 import TeacherPage from "./pages/teacherPage";
 import CreatePage from "./pages/createPage";
@@ -18,6 +17,7 @@ import ChapterIdPage from "./pages/chapterIdPage/chapterIdPage";
 import CoursePage from "./pages/coursesPage/courses";
 import CourseLearningPage from "./pages/courseLearningPage";
 import CourseLayout from "./layouts/course-layout";
+import Dashboard from "./pages/dashboard";
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
@@ -29,7 +29,7 @@ const router = createBrowserRouter([
   {
     element: <RootLayout />,
     children: [
-      { path: "/", element: <HelloPage /> },
+      { path: "/", element: <Dashboard /> },
       { path: "/search", element: <SearchPage /> },
       {
         path: "/teacher",
@@ -52,8 +52,14 @@ const router = createBrowserRouter([
     element: <CourseLayout />,
     children: [
       {
-        path: "/course/:id/chapter/:chapterId",
+        path: "/courses/:id",
         element: <CourseLearningPage />,
+        children: [
+          {
+            path: "chapters/:chapterId",
+            element: <div>Chapter Learning Page</div>,
+          },
+        ],
       },
     ],
   },

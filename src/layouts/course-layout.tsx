@@ -1,31 +1,45 @@
+import { Navigate, Outlet, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+
 import { useAuth } from "@clerk/clerk-react";
 import { Loader2 } from "lucide-react";
-import { Navigate, Outlet, useParams } from "react-router-dom";
-import "./index.css";
+
 import CourseSidebar from "@/pages/_components/course-sidebar";
 import CourseNavbar from "@/pages/_components/course-navbar";
-import { useEffect, useState } from "react";
 import axios from "@/services/CustomAxios";
 
-export interface IChapter {
-  categoryId: string;
-  chapters: { id: string; title: string; isFree: boolean }[];
-  length: number;
-  createdAt: Date;
-  description: string;
+import "./index.css";
+
+export interface ICourse {
   id: string;
-  imageUrl: string;
-  isPublished: boolean;
-  isPurchase: boolean;
-  price: number;
-  title: string;
-  updatedAt: Date;
   userId: string;
+  title: string;
+  description: string;
+  imageUrl: string;
+  price: number;
+  isPublished: boolean;
+  categoryId: string;
+  chapters: {
+    id: string;
+    title: string;
+    description: string;
+    videoUrl: string;
+    position: number;
+    isPublished: boolean;
+    isFree: boolean;
+    userProgress: {
+      id: string;
+      chapterId: string;
+      isCompleted: boolean;
+    }[];
+  }[];
+  progressCount: number;
+  isPurchased: boolean;
 }
 
 const CourseLayout = () => {
   const { isLoaded, isSignedIn } = useAuth();
-  const [course, setCourse] = useState<IChapter>({} as IChapter);
+  const [course, setCourse] = useState<ICourse>({} as ICourse);
   const { userId } = useAuth();
   const { id } = useParams();
 
@@ -34,8 +48,6 @@ const CourseLayout = () => {
       const response = await axios.get(
         `/api/courses/user/${userId}/get-course/${id}`
       );
-      console.log(response.data);
-
       setCourse(response.data);
     } catch (error) {
       console.log(error);
@@ -58,17 +70,13 @@ const CourseLayout = () => {
   }
   return (
     <div className="h-full">
-      <div className="h-20 md:pl-56 fixed inset-y-0 w-full z-50">
-        <CourseNavbar />
+      <div className="h-20 md:pl-80 fixed inset-y-0 w-full z-50">
+        <CourseNavbar course={course} />
       </div>
-      <div className="sidebar h-full  w-56 flex-col fixed inset-y-0 z-50">
-        <CourseSidebar
-          title={course.title}
-          isPurchase={course.isPurchase}
-          chapters={course.chapters}
-        />
+      <div className="sidebar h-full w-80 flex-col fixed inset-y-0 z-50">
+        <CourseSidebar course={course} />
       </div>
-      <main className="md:pl-56 pt-[80px] h-full">
+      <main className="md:pl-80 pt-[80px] h-full">
         <Outlet />
       </main>
     </div>

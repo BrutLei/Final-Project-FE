@@ -1,8 +1,14 @@
 import axios from "@/services/CustomAxios";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Categories } from "./_components/categories";
+import { SearchInput } from "@/components/search-input";
+import { useAuth } from "@clerk/clerk-react";
+import { Navigate, useSearchParams } from "react-router-dom";
+import { CoursesList } from "@/components/courses-list";
 
-interface CourseListProps {
+// Courses
+
+type CourseListProps = {
   id: string;
   title: string;
   imageUrl: string;
@@ -13,15 +19,48 @@ interface CourseListProps {
     id: string;
     name: string;
   };
+};
+
+export interface CoursesListProps {
+  items: CourseListProps[];
 }
-interface CoursesListProps extends Array<CourseListProps> {}
+// Categories
+export type Category = {
+  id: string;
+  name: string;
+};
+
 const SearchPage = () => {
-  const [courses, setCourses] = useState<CoursesListProps>([]);
+  const { isSignedIn, isLoaded, userId } = useAuth();
+
+  const [courses, setCourses] = useState<CourseListProps[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+
+  const [searchParams] = useSearchParams();
+  const currentCategoryId = searchParams.get("categoryId");
+  const currentTitle = searchParams.get("title");
+
+  const fetchCategories = async () => {
+    try {
+      const categories = await axios.get("/api/categories");
+      setCategories(categories.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const fetchCourses = async () => {
     try {
-      const courses = await axios.get("/api/courses/get-courses");
+      console.log(currentCategoryId);
+
+      const courses = await axios.get(`/api/courses/get-courses/${userId}`, {
+        params: {
+          categoryId: currentCategoryId,
+          title: currentTitle,
+        },
+      });
       console.log(courses.data);
+
       setCourses(courses.data);
     } catch (error) {
       console.log(error);
@@ -29,57 +68,26 @@ const SearchPage = () => {
   };
   useEffect(() => {
     fetchCourses();
-  }, []);
+    fetchCategories();
+  }, [currentCategoryId, currentTitle]);
 
+  if (!isLoaded) {
+    return <h1>Loading...</h1>;
+  }
+
+  if (!isSignedIn) {
+    return <Navigate to="/" />;
+  }
   return (
-    <div
-      className="
-      container
-      mx-auto
-      px-4
-      sm:px-6
-      lg:px-8
-      py-6
-    "
-    >
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
-        {courses.map((course) => (
-          <Link
-            to={`/course/${course.id}/chapter/${course?.chapters[0]?.id}`}
-            key={course.id}
-          >
-            <div className="border rounded-lg p-4 h-full ">
-              <div className="w-full aspect-auto overflow-hidden relative rounded-md">
-                <img
-                  src={`http://localhost:3000/api/courses/images/${course.imageUrl}`}
-                  alt={course.title}
-                  className="object-cover rounded-md"
-                />
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold mt-4">{course.title}</h3>
-                <p className="text-xs text-muted-foreground">
-                  {course.category.name}
-                </p>
-                <p className="text-sm text-gray-500 mt-1">
-                  {course.chapters.length}{" "}
-                  {course.chapters.length > 1 ? "Chapters" : "Chapter"}
-                </p>
-              </div>
-              <div>
-                {course.progress !== null ? (
-                  <p>{course.progress}</p>
-                ) : (
-                  <p className="text-lg font-semibold mt-1">
-                    {course.price === 0 ? "Free" : `$${course.price}`}
-                  </p>
-                )}
-              </div>
-            </div>
-          </Link>
-        ))}
+    <>
+      <div className="px-6 pt-6 md:hidden md:mb-0 block">
+        <SearchInput />
       </div>
-    </div>
+      <div className="p-6 space-y-4">
+        <Categories items={categories} />
+        <CoursesList items={courses} />
+      </div>
+    </>
   );
 };
 

@@ -1,13 +1,13 @@
 /* Hide sidebar on small screens */
 @media (max-width: 768px) {
-  .sidebar {
+  .search-input {
     display: none;
   }
 }
 
 /* Show sidebar on medium-sized screens and up */
 @media (min-width: 768px) {
-  .sidebar {
-    display: flex;
+  .search-input {
+    display: block;
   }
 }
