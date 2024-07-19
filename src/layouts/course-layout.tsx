@@ -38,15 +38,14 @@ export interface ICourse {
 }
 
 const CourseLayout = () => {
-  const { isLoaded, isSignedIn } = useAuth();
+  const { isLoaded, isSignedIn, userId } = useAuth();
   const [course, setCourse] = useState<ICourse>({} as ICourse);
-  const { userId } = useAuth();
-  const { id } = useParams();
+  const { courseId } = useParams();
 
   const fetchCourse = async () => {
     try {
       const response = await axios.get(
-        `/api/courses/user/${userId}/get-course/${id}`
+        `/api/courses/user/${userId}/get-course/${courseId}`
       );
       setCourse(response.data);
     } catch (error) {
@@ -55,7 +54,7 @@ const CourseLayout = () => {
   };
   useEffect(() => {
     fetchCourse();
-  }, []);
+  }, [isLoaded]);
 
   if (!isLoaded) {
     return (

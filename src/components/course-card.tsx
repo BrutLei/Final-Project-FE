@@ -2,11 +2,13 @@ import { Link } from "react-router-dom";
 import { IconBadge } from "./icon-badge";
 import { BookOpen } from "lucide-react";
 import { formatPrice } from "@/lib/format";
+import CourseProgress from "./course-progress";
 
 interface CourseCardProps {
   key: string;
   id: string;
   title: string;
+  chapters: { id: string }[];
   imageUrl: string;
   chaptersLength: number;
   price: number;
@@ -16,7 +18,7 @@ interface CourseCardProps {
 
 export const CourseCard = (props: CourseCardProps) => {
   return (
-    <Link to={`/courses/${props.id}`}>
+    <Link to={`/courses/${props.id}/chapters/${props?.chapters?.[0]?.id}`}>
       <div className=" group hover:shadow-sm transition overflow-hidden border rounded-lg p-3 h-full">
         <div className=" relative w-full aspect-video rounded-md overflow-hidden">
           <img
@@ -40,7 +42,11 @@ export const CourseCard = (props: CourseCardProps) => {
             </div>
           </div>
           {props.progress !== null ? (
-            <div>Todo: Add progress bar here</div>
+            <CourseProgress
+              value={props.progress}
+              size="sm"
+              variant={props.progress === 100 ? "success" : "default"}
+            />
           ) : (
             <p className=" text-md md:text-sm font-medium text-slate-700">
               {formatPrice(props.price)}

@@ -18,6 +18,7 @@ import CoursePage from "./pages/coursesPage/courses";
 import CourseLearningPage from "./pages/courseLearningPage";
 import CourseLayout from "./layouts/course-layout";
 import Dashboard from "./pages/dashboard";
+import ChapterLearningPage from "./pages/chapterLearning/chapter-learning-page";
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
@@ -52,12 +53,12 @@ const router = createBrowserRouter([
     element: <CourseLayout />,
     children: [
       {
-        path: "/courses/:id",
+        path: "/courses/:courseId",
         element: <CourseLearningPage />,
         children: [
           {
             path: "chapters/:chapterId",
-            element: <div>Chapter Learning Page</div>,
+            element: <ChapterLearningPage />,
           },
         ],
       },

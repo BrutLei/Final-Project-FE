@@ -1,11 +1,13 @@
 import React, { useRef, useEffect } from "react";
 import Hls from "hls.js";
+import { Lock } from "lucide-react";
 
 interface HLSPlayerProps extends React.VideoHTMLAttributes<HTMLVideoElement> {
   src: string;
+  isLocked: boolean;
 }
 
-const HLSPlayer: React.FC<HLSPlayerProps> = ({ src, ...props }) => {
+const HLSPlayer: React.FC<HLSPlayerProps> = ({ src, isLocked, ...props }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -42,9 +44,27 @@ const HLSPlayer: React.FC<HLSPlayerProps> = ({ src, ...props }) => {
   }, [src]);
 
   return (
-    <video ref={videoRef} controls {...props} muted>
-      Your browser does not support the video tag.
-    </video>
+    <div className=" relative aspect-video">
+      {!isLocked && (
+        <video
+          ref={videoRef}
+          controls
+          {...props}
+          width="100%"
+          height="100%"
+          muted
+          className="absolute inset-0 flex items-center justify-center bg-slate-800 text-secondary"
+        >
+          Your browser does not support the video tag.
+        </video>
+      )}
+      {isLocked && (
+        <div className="absolute inset-0 flex items-center justify-center bg-slate-800 text-secondary">
+          <Lock className="w-8 h-8 mr-2" />
+          <p>This chapter is locked</p>
+        </div>
+      )}
+    </div>
   );
 };
 
