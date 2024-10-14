@@ -9,6 +9,7 @@ import { Separator } from "@/components/ui/separator";
 import Preview from "@/components/preview";
 import { File } from "lucide-react";
 import CourseProgressButton from "./_components/course-progress-btn";
+import { Tabs } from "./_components/tabs";
 
 type Chapter = {
   chapter: {
@@ -60,7 +61,7 @@ type Chapter = {
 
 const ChapterLearningPage = () => {
   const [chapter, setChapter] = useState<Chapter | null>(null);
-
+  const [toggleState, setToggleState] = useState(1);
   const { userId } = useAuth();
   const { courseId, chapterId } = useParams();
   const navigate = useNavigate();
@@ -95,53 +96,67 @@ const ChapterLearningPage = () => {
         />
       )}
       <div className="flex flex-col max-w-4xl mx-auto">
-        <div className="p-4">
+        <div className="">
           <HLSPlayer
             src={`http://localhost:3000/api/courses/videos/${chapter?.videoUrl}`}
             isLocked={isLocked}
           />
         </div>
-        <div className="p-4 flex flex-col md:flex-row items-center justify-between">
-          <h2 className="text-2xl font-semibold mb-2">
-            {chapter?.chapter?.title}
-          </h2>
-          {chapter?.purchase ? (
-            <div>
-              <CourseProgressButton
-                chapterId={chapterId as string}
-                courseId={courseId as string}
-                nextChapterId={chapter.nextChapter?.id}
-                isCompleted={!!chapter.userProgress?.isCompleted}
-              />
-            </div>
-          ) : (
-            <CourseEnrollButton
-              courseId={courseId}
-              price={chapter?.course.price || 0}
-            />
-          )}
-        </div>
-        <Separator />
-        <div>
-          <Preview value={chapter?.chapter?.description || ""} />
-        </div>
-        {!!chapter?.attachments.length && (
+
+        <Tabs toggleState={toggleState} setToggleState={setToggleState} />
+        {toggleState === 1 ? (
           <>
-            <Separator />
-            <div className="p-4">
-              {chapter.attachments.map((attachment) => (
-                <a
-                  href={`http://localhost:3000/api/courses/attachments/${attachment.url}`}
-                  key={attachment.id}
-                  target="_blank"
-                  className="flex items-center p-3 w-full bg-sky-100 border text-sky-700 rounded-md hover:underline"
-                >
-                  <File size={24} />
-                  <p className="line-clamp-1">{attachment.name}</p>
-                </a>
-              ))}
+            <div className="p-4 flex flex-col md:flex-row items-center justify-between">
+              <h2 className="text-2xl font-semibold mb-2">
+                {chapter?.chapter?.title}
+              </h2>
+              {chapter?.purchase ? (
+                <div>
+                  <CourseProgressButton
+                    chapterId={chapterId as string}
+                    courseId={courseId as string}
+                    nextChapterId={chapter.nextChapter?.id}
+                    isCompleted={!!chapter.userProgress?.isCompleted}
+                  />
+                </div>
+              ) : (
+                <CourseEnrollButton
+                  courseId={courseId}
+                  price={chapter?.course.price || 0}
+                />
+              )}
             </div>
+            <Separator />
+            <div>
+              <Preview value={chapter?.chapter?.description || ""} />
+            </div>
+            {!!chapter?.attachments.length && (
+              <>
+                <Separator />
+                <div className="p-4">
+                  {chapter.attachments.map((attachment) => (
+                    <a
+                      href={`http://localhost:3000/api/courses/attachments/${attachment.url}`}
+                      key={attachment.id}
+                      target="_blank"
+                      className="flex items-center p-3 w-full bg-sky-100 border text-sky-700 rounded-md hover:underline"
+                    >
+                      <File size={24} />
+                      <p className="line-clamp-1">{attachment.name}</p>
+                    </a>
+                  ))}
+                </div>
+              </>
+            )}
           </>
+        ) : (
+          <div className="p-4">
+            <h2 className="text-2xl font-semibold mb-2">Comments</h2>
+            <Separator />
+            <div className="bg-sky-100 p-4 rounded-md mt-2">
+              <p>Comments section</p>
+            </div>
+          </div>
         )}
       </div>
     </div>
